@@ -1,0 +1,79 @@
+import { useDispatch, useSelector } from "react-redux";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import {
+  authStart,
+  authSuccess,
+  authError,
+  initSession,
+  logout,
+} from "../redux/slices/authSlice";
+import { RootState, AppDispatch } from "../redux/store";
+
+export function useAuth() {
+  const dispatch = useDispatch<AppDispatch>();
+  const authState = useSelector((state: RootState) => state.auth);
+
+  const login = async (email: string, password: string) => {
+    try {
+      dispatch(authStart());
+
+      const res = await signInWithEmailAndPassword(auth, email, password);
+      const token = await res.user.getIdToken();
+
+      const userData = { uid: res.user.uid, email: res.user.email };
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      dispatch(authSuccess({ user: userData, token }));
+    } catch (err: any) {
+      dispatch(authError(err.message));
+    }
+  };
+
+  const register = async (email: string, password: string) => {
+    try {
+      dispatch(authStart());
+
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const token = await res.user.getIdToken();
+
+      const userData = { uid: res.user.uid, email: res.user.email };
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      dispatch(authSuccess({ user: userData, token }));
+    } catch (err) {
+      let message = "Error al registrar usuario";
+      if (err instanceof Error) message = err.message;
+      dispatch(authError(message));
+    }
+  };
+
+  const initFromStorage = () => {
+    const token = localStorage.getItem("token");
+    const userRaw = localStorage.getItem("user");
+
+    if (!token || !userRaw) {
+      dispatch(initSession({ user: null, token: null }));
+      return;
+    }
+
+    dispatch(initSession({ user: JSON.parse(userRaw), token }));
+  };
+
+  const logoutUser = async () => {
+    await signOut(auth);
+    dispatch(logout());
+  };
+
+  return {
+    ...authState,
+    login,
+    initFromStorage,
+    logoutUser,
+    register
+  };
+}
