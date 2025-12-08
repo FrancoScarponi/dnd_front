@@ -1,4 +1,3 @@
-// src/pages/LoginPage.tsx
 import { FormEvent, useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -9,12 +8,10 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // Levanto sesión previa
   useEffect(() => {
     initFromStorage();
   }, []);
 
-  // Si hay token, me voy a "/"
   useEffect(() => {
     if (token) {
       navigate("/", { replace: true });
