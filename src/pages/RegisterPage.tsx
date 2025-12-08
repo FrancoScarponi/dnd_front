@@ -1,11 +1,12 @@
-// src/pages/LoginPage.tsx
+// src/pages/RegisterPage.tsx
 import { FormEvent, useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 
-const LoginPage = () => {
-  const { login, loading, error, initFromStorage, token } = useAuth();
+const RegisterPage = () => {
+  const { register, loading, error, initFromStorage, token } = useAuth();
   const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -15,20 +16,27 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (token) {
-      navigate("/app/campaigns", { replace: true }); // o "/" si querés
+      navigate("/app/campaigns", { replace: true });
     }
   }, [token, navigate]);
 
-  const handleLogin = (e: FormEvent) => {
+  const handleRegister = (e: FormEvent) => {
     e.preventDefault();
-    login(email, password);
+    register(email, password, displayName);
   };
 
   return (
     <div>
-      <h1>Ingresar</h1>
+      <h1>Crear cuenta</h1>
 
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleRegister}>
+        <input
+          type="text"
+          placeholder="nombre"
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+        />
+
         <input
           type="email"
           placeholder="email"
@@ -41,18 +49,18 @@ const LoginPage = () => {
           type="password"
           placeholder="contraseña"
           value={password}
-          autoComplete="current-password"
+          autoComplete="new-password"
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <button disabled={loading} type="submit">
-          {loading ? "Cargando..." : "Ingresar"}
+          {loading ? "Cargando..." : "Crear usuario"}
         </button>
       </form>
 
       <p style={{ marginTop: 8 }}>
-        ¿No tenés cuenta?{" "}
-        <Link to="/register">Crear usuario</Link>
+        ¿Ya tenés cuenta?{" "}
+        <Link to="/login">Ingresar</Link>
       </p>
 
       {error && <p style={{ color: "red", marginTop: 8 }}>{error}</p>}
@@ -60,4 +68,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
