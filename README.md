@@ -12,7 +12,7 @@ La aplicación se conecta a la API backend correspondiente y permite a los usuar
 - Consultar información proveniente de la API de “DnD5e” (Clases, Razas, Estadísticas, Traits, Habilidades, Items, etc.)
 - Interactuar con el estado de cada personaje y sus actualizaciones por sesión
 
-El frontend funciona como **SPA (Single Page Application)** y maneja el estado global mediante Redux Toolkit, además de proveer protección de rutas basada en la sesión activa del usuario.
+El frontend funciona como **SPA** manejando ademas los estados globales mediante Redux Toolkit, además de proveer protección de rutas basada en la sesión activa del usuario.
 
 ---
 
