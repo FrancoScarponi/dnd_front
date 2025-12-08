@@ -9,6 +9,7 @@ import {
   logout,
 } from "../redux/slices/authSlice";
 import { RootState, AppDispatch } from "../redux/store";
+import { fetchBackendUser, registerBackendUser } from "../api/user";
 
 export function useAuth() {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,31 +21,29 @@ export function useAuth() {
 
       const res = await signInWithEmailAndPassword(auth, email, password);
       const token = await res.user.getIdToken();
-
-      const userData = { uid: res.user.uid, email: res.user.email };
+      const user = await fetchBackendUser(token);
 
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("user", JSON.stringify(user));
 
-      dispatch(authSuccess({ user: userData, token }));
+      dispatch(authSuccess({ user, token }));
     } catch (err: any) {
       dispatch(authError(err.message));
     }
   };
 
-  const register = async (email: string, password: string) => {
+  const register = async (email: string, password: string, displayName: string) => {
     try {
       dispatch(authStart());
-
+      
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const token = await res.user.getIdToken();
-
-      const userData = { uid: res.user.uid, email: res.user.email };
+      const user = await registerBackendUser(token, displayName);
 
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("user", JSON.stringify(user));
 
-      dispatch(authSuccess({ user: userData, token }));
+      dispatch(authSuccess({ user: user, token }));
     } catch (err) {
       let message = "Error al registrar usuario";
       if (err instanceof Error) message = err.message;

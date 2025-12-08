@@ -1,12 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { User } from "../../types/userTypes";
 
-interface AuthUser {
-  uid: string;
-  email: string | null;
-}
 
 interface AuthState {
-  user: AuthUser | null;
+  user: User | null;
   token: string | null;
   loading: boolean;
   error: string | null;
@@ -27,7 +24,7 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    authSuccess(state, action: PayloadAction<{ user: AuthUser; token: string }>) {
+    authSuccess(state, action: PayloadAction<{ user: User; token: string }>) {
       state.loading = false;
       state.user = action.payload.user;
       state.token = action.payload.token;
@@ -36,7 +33,7 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    initSession(state, action: PayloadAction<{ user: AuthUser | null; token: string | null }>) {
+    initSession(state, action: PayloadAction<{ user: User | null; token: string | null }>) {
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
