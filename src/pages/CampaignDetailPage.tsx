@@ -1,0 +1,58 @@
+import { Link, useParams } from "react-router-dom";
+//import { useCampaignDetail } from "../hooks/useCampaigns";
+import { mockCampaignDetail } from "../mocks/campaignDetails";
+
+export default function CampaignDetailPage() {
+  const { id } = useParams();
+  //const { data, loading, error } = useCampaignDetail(id);
+
+  const { data, loading, error } = {
+    data: mockCampaignDetail,
+    loading: false,
+    error: null,
+  };
+
+  return (
+    <div className="bg-zinc-950 text-white px-4 py-8">
+      <div className="mx-auto max-w-3xl">
+        <Link
+          to="/campaigns"
+          className="text-sm text-indigo-400 hover:text-indigo-300"
+        >
+          ← Volver
+        </Link>
+
+        {loading && <p className="text-zinc-400 mt-4">Cargando...</p>}
+        {error && <p className="text-red-400 mt-4">{error}</p>}
+
+        {data && (
+          <div className="mt-4 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-bold">{data.name}</h1>
+                {data.description && (
+                  <p className="text-zinc-400 mt-2">{data.description}</p>
+                )}
+              </div>
+
+              <div className="text-right">
+                <div className="text-xs text-zinc-400">Invite code</div>
+                <div className="font-mono text-sm bg-zinc-800 border border-zinc-700 px-3 py-1 rounded-md">
+                  {data.inviteCode}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-2 text-sm text-zinc-300">
+              <div>
+                Players: {data.players?.length ?? 0}
+              </div>
+              <div>Characters: {data.characters?.length ?? 0}</div>
+              <div>Sessions: {data.sessions?.length ?? 0}</div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

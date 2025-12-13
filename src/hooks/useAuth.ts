@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import {
   authStart,
@@ -27,8 +27,12 @@ export function useAuth() {
       localStorage.setItem("user", JSON.stringify(user));
 
       dispatch(authSuccess({ user, token }));
-    } catch (err: any) {
-      dispatch(authError(err.message));
+    } catch (err) {
+      let message = "Error al iniciar sesión";
+      if (err instanceof Error) {
+        message = err.message;
+      }
+      dispatch(authError(message));
     }
   };
 
@@ -38,7 +42,18 @@ export function useAuth() {
       
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const token = await res.user.getIdToken();
-      const user = await registerBackendUser(token, displayName);
+      if (!res.user) throw new Error("No se pudo crear el usuario");
+
+      await updateProfile(res.user, {
+        displayName: displayName,
+      });
+      //const user = await registerBackendUser(token, displayName);
+
+      const user = {
+        firebaseId: res.user.uid,
+        email: res.user.email,
+        displayName: res.user.displayName
+      }
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
