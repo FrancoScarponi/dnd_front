@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { dndGet } from "../api/dnd5eapi";
+import { dndGet } from "../api/dnd5e.client";
 import type { ListResponse, ClassDetail, RaceDetail } from "../types/dnd5e";
 
 export function useDndClasses() {

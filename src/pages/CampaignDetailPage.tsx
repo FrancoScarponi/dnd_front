@@ -1,16 +1,38 @@
 import { Link, useParams } from "react-router-dom";
-//import { useCampaignDetail } from "../hooks/useCampaigns";
-import { mockCampaignDetail } from "../mocks/campaignDetails";
+import { useEffect, useState } from "react";
+import { CampaignDTO } from "../types/campaignTypes";
+import { getCampaign } from "../api/mock/campaign";
 
 export default function CampaignDetailPage() {
   const { id } = useParams();
-  //const { data, loading, error } = useCampaignDetail(id);
+  const [data, setData] = useState<CampaignDTO | null>(null);
+  const [loading, setLoading] = useState(!!id);
+  const [error, setError] = useState<string | null>(null);
 
-  const { data, loading, error } = {
-    data: mockCampaignDetail,
-    loading: false,
-    error: null,
-  };
+  useEffect(() => {
+    if (!id) return;
+
+    let active = true;
+    (async () => {
+      setError(null);
+      setLoading(true);
+      try {
+        const res = await getCampaign(id);
+        if (active) setData(res);
+      } catch (err) {
+        if (active)
+          setError(
+            err instanceof Error ? err.message : "Error al cargar campaña"
+          );
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [id]);
 
   return (
     <div className="bg-zinc-950 text-white px-4 py-8">
@@ -27,6 +49,7 @@ export default function CampaignDetailPage() {
 
         {data && (
           <div className="mt-4 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
+            {/* Header */}
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-bold">{data.name}</h1>
@@ -43,10 +66,26 @@ export default function CampaignDetailPage() {
               </div>
             </div>
 
+            {/* Actions */}
+            <div className="mt-6 flex gap-3">
+              <Link
+                to={`/campaigns/${data._id}/characters`}
+                className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold hover:bg-indigo-500"
+              >
+                Ver personajes
+              </Link>
+
+              <Link
+                to={`/characters/new?campaign=${data._id}`}
+                className="rounded-md border border-zinc-700 px-4 py-2 text-sm hover:border-zinc-600"
+              >
+                Crear personaje
+              </Link>
+            </div>
+
+            {/* Stats */}
             <div className="mt-6 grid gap-2 text-sm text-zinc-300">
-              <div>
-                Players: {data.players?.length ?? 0}
-              </div>
+              <div>Players: {data.players?.length ?? 0}</div>
               <div>Characters: {data.characters?.length ?? 0}</div>
               <div>Sessions: {data.sessions?.length ?? 0}</div>
             </div>
