@@ -1,4 +1,4 @@
-import type { CampaignDTO } from "../types/campaignTypes";
+import type { CampaignDTO } from "../../types/campaignTypes";
 
 export const mockCampaigns: CampaignDTO[] = [
   {
@@ -41,3 +41,15 @@ export const mockCampaigns: CampaignDTO[] = [
     updatedAt: "2025-03-01T12:00:00.000Z",
   },
 ];
+
+const longDescriptions: Record<string, string> = {
+  cmp_1:
+    "Una campaña oscura y gótica ambientada en Barovia, dominada por el vampiro Strahd von Zarovich. " +
+    "Los personajes deberán sobrevivir en un mundo donde la esperanza es escasa y la muerte acecha en cada esquina.",
+};
+
+export function getMockCampaignDetail(id: string): CampaignDTO {
+  const base = mockCampaigns.find((c) => c._id === id);
+  if (!base) throw new Error("Campaign no encontrada");
+  return { ...base, description: longDescriptions[id] ?? base.description };
+}

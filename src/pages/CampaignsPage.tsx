@@ -1,17 +1,44 @@
 import { Link } from "react-router-dom";
-//import { useCampaignsList } from "../hooks/useCampaigns";
-import { mockCampaigns } from "../mocks/campaigns";
+import { useEffect, useState } from "react";
+import { CampaignDTO } from "../types/campaignTypes";
+import { listMyCampaigns } from "../api/mock/campaign";
 
 export default function CampaignsPage() {
-  //const { data, loading, error, refresh } = useCampaignsList();
+  const [data, setData] = useState<CampaignDTO[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  //mock data
-  const { data, loading, error, refresh } = {
-    data: mockCampaigns,
-    loading: false,
-    error: null,
-    refresh: () => {},
+  const refresh = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      setData(await listMyCampaigns());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al cargar campañas");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await listMyCampaigns();
+        if (active) setData(res);
+      } catch (err) {
+        if (active)
+          setError(
+            err instanceof Error ? err.message : "Error al cargar campañas"
+          );
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <div className="bg-zinc-950 text-white px-4 py-8">

@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
-import { createCampaign } from "../api/campaigns";
+import { createCampaign } from "../api/mock/campaign";
 
 export default function CampaignNewPage() {
   const nav = useNavigate();
@@ -15,16 +15,25 @@ export default function CampaignNewPage() {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    const cleanName = name.trim();
+    const cleanDescription = description.trim();
+
+    if (!cleanName) {
+      setError("El nombre es obligatorio");
+      return;
+    }
+
     setError(null);
     setLoading(true);
 
     try {
       const created = await createCampaign({
-        name: name.trim(),
-        description: description.trim(),
+        name: cleanName,
+        description: cleanDescription ? cleanDescription : undefined,
       });
 
-      nav(`/campaigns/${created._id}`, { replace: true });
+      // ✅ después de crear, vas directo a asignar/crear personajes
+      nav(`/campaigns/${created._id}/characters`, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error creando campaña");
     } finally {
@@ -76,6 +85,10 @@ export default function CampaignNewPage() {
             {error && (
               <p className="text-sm text-red-400 text-center">{error}</p>
             )}
+
+            <p className="text-xs text-zinc-500 text-center pt-2">
+              Después de crear la campaña vas a poder agregar personajes.
+            </p>
           </form>
         </div>
       </div>
