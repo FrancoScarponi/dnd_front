@@ -11,6 +11,8 @@ import CharactersPage from "../pages/CharacterPage";
 import CharacterNewPage from "../pages/CharacterNewPage";
 import CharacterEditPage from "../pages/CharacterEditPage";
 import CampaignCharactersPage from "../pages/CampaignCharactersPage";
+import CampaignSessionsPage from "../pages/CampaignSessionPage";
+import NewSessionPage from "../pages/NewSessionPage";
 
 const AppRouter = () => {
   return (
@@ -32,7 +34,12 @@ const AppRouter = () => {
         <Route path="/campaigns" element={<CampaignsPage />} />
         <Route path="/campaigns/new" element={<CampaignNewPage />} />
         <Route path="/campaigns/:id" element={<CampaignDetailPage />} />
-        <Route path="/campaigns/:campaignId/characters" element={<CampaignCharactersPage />} />
+        <Route path="/campaigns/:campaignId/characters" element={<CampaignCharactersPage />} />\
+
+        {/* Sesiones */}
+        <Route path="/campaigns/:id/sessions" element={<CampaignSessionsPage />} />
+        <Route path="/sessions/new" element={<NewSessionPage />} />
+
         
         {/* Personajes */}
         <Route path="/characters" element={<CharactersPage />} />

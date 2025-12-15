@@ -1,45 +1,38 @@
-import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import Input from "../components/ui/Input";
 import { createCampaign } from "../api/mock/campaign";
+
+import {
+  campaignFormSchema,
+  CampaignFormValues,
+} from "../validation/campaignSchemas";
 
 export default function CampaignNewPage() {
   const nav = useNavigate();
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<CampaignFormValues>({
+    resolver: zodResolver(campaignFormSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+    },
+  });
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  async function onSubmit(values: CampaignFormValues) {
+    const created = await createCampaign({
+      name: values.name.trim(),
+      description: values.description.trim(),
+    });
 
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    const cleanName = name.trim();
-    const cleanDescription = description.trim();
-
-    if (!cleanName) {
-      setError("El nombre es obligatorio");
-      return;
-    }
-
-    setError(null);
-    setLoading(true);
-
-    try {
-      const created = await createCampaign({
-        name: cleanName,
-        description: cleanDescription ? cleanDescription : undefined,
-      });
-
-      // ✅ después de crear, vas directo a asignar/crear personajes
-      nav(`/campaigns/${created._id}/characters`, { replace: true });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error creando campaña");
-    } finally {
-      setLoading(false);
-    }
-  };
+    nav(`/campaigns/${created._id}/characters`, { replace: true });
+  }
 
   return (
     <div className="bg-zinc-950 text-white px-4 py-8">
@@ -55,36 +48,46 @@ export default function CampaignNewPage() {
         </div>
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-          <form onSubmit={onSubmit} className="space-y-4">
-            <Input
-              label="Nombre"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Curse of Strahd"
-              required
-            />
-
-            <div className="space-y-1">
-              <label className="block text-sm text-zinc-400">Descripción</label>
-              <textarea
-                className="w-full min-h-[120px] rounded-md bg-zinc-800 border border-zinc-700 px-3 py-2 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="De qué va la campaña..."
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Nombre */}
+            <div>
+              <Input
+                label="Nombre"
+                placeholder="Curse of Strahd"
+                {...register("name")}
               />
+              {errors.name && (
+                <p className="text-xs text-red-400 mt-1">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
 
+            {/* descripcion */}
+            <div>
+              <label className="block text-sm text-zinc-400 mb-1">
+                Descripción
+              </label>
+              <textarea
+                {...register("description")}
+                className="w-full min-h-[120px] rounded-md bg-zinc-800 border border-zinc-700 px-3 py-2 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="De qué va la campaña..."
+              />
+              {errors.description && (
+                <p className="text-xs text-red-400 mt-1">
+                  {errors.description.message}
+                </p>
+              )}
+            </div>
+
+            {/* boton */}
             <button
-              disabled={loading}
+              disabled={isSubmitting}
               type="submit"
               className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white font-semibold py-2 rounded-md transition-colors"
             >
-              {loading ? "Creando..." : "Crear campaña"}
+              {isSubmitting ? "Creando..." : "Crear campaña"}
             </button>
-
-            {error && (
-              <p className="text-sm text-red-400 text-center">{error}</p>
-            )}
 
             <p className="text-xs text-zinc-500 text-center pt-2">
               Después de crear la campaña vas a poder agregar personajes.
