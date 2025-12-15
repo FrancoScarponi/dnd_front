@@ -49,7 +49,7 @@ export default function CampaignDetailPage() {
 
         {data && (
           <div className="mt-4 rounded-xl border border-zinc-800 bg-zinc-900 p-6">
-            {/* Header */}
+            {/* header */}
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-bold">{data.name}</h1>
@@ -66,7 +66,7 @@ export default function CampaignDetailPage() {
               </div>
             </div>
 
-            {/* Actions */}
+            {/* actions */}
             <div className="mt-6 flex gap-3">
               <Link
                 to={`/campaigns/${data._id}/characters`}
@@ -81,9 +81,16 @@ export default function CampaignDetailPage() {
               >
                 Crear personaje
               </Link>
+
+              <Link
+                to={`/campaigns/${data._id}/sessions`}
+                className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold hover:bg-emerald-500"
+              >
+                Sesiones
+              </Link>
             </div>
 
-            {/* Stats */}
+            {/* stats */}
             <div className="mt-6 grid gap-2 text-sm text-zinc-300">
               <div>Players: {data.players?.length ?? 0}</div>
               <div>Characters: {data.characters?.length ?? 0}</div>
