@@ -26,7 +26,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className=" flex items-center justify-center px-4">
+    <div className=" flex items-center justify-center px-4 bg-zinc-950 min-h-screen">
       <div className="w-100 max-w-md bg-zinc-900 rounded-xl shadow-lg p-8 border border-zinc-800">
         <h1 className="text-2xl font-bold text-white mb-6 text-center">
           Ingresar
