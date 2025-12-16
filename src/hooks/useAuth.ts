@@ -22,7 +22,7 @@ export function useAuth() {
       const res = await signInWithEmailAndPassword(auth, email, password);
       
       const token = await res.user.getIdToken();
-      
+      console.log(token)
       const user = await fetchBackendUser(token);  
 
       localStorage.setItem("token", token);
