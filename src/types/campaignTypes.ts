@@ -12,3 +12,8 @@ export type CampaignDTO = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type MyCampaignsResponse = {
+  DMCampaigns: CampaignDTO[];
+  playerCampaigns: CampaignDTO[];
+};

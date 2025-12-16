@@ -13,6 +13,7 @@ import CharacterEditPage from "../pages/CharacterEditPage";
 import CampaignCharactersPage from "../pages/CampaignCharactersPage";
 import CampaignSessionsPage from "../pages/CampaignSessionPage";
 import NewSessionPage from "../pages/NewSessionPage";
+import CampaignJoinPage from "../pages/CampaignJoinPage";
 
 const AppRouter = () => {
   return (
@@ -35,6 +36,8 @@ const AppRouter = () => {
         <Route path="/campaigns/new" element={<CampaignNewPage />} />
         <Route path="/campaigns/:id" element={<CampaignDetailPage />} />
         <Route path="/campaigns/:campaignId/characters" element={<CampaignCharactersPage />} />\
+        <Route path="/campaigns/join" element={<CampaignJoinPage />} />
+
 
         {/* Sesiones */}
         <Route path="/campaigns/:id/sessions" element={<CampaignSessionsPage />} />

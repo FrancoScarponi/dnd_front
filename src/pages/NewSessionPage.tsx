@@ -12,6 +12,7 @@ export default function NewSessionPage() {
   const campaignId = searchParams.get("campaign");
 
   const navigate = useNavigate();
+  const today = new Date().toISOString().slice(0, 10); 
 
   const {
     register,
@@ -20,11 +21,9 @@ export default function NewSessionPage() {
   } = useForm({
     resolver: zodResolver(sessionFormSchema),
     defaultValues: {
-      sessionNumber: 1,
       title: "",
       description: "",
-      startDate: "",
-      endDate: "",
+      startDate: today,
       notesDM: "",
       notesPlayers: "",
     },
@@ -40,7 +39,6 @@ export default function NewSessionPage() {
       ...values,
       description: values.description || undefined,
       startDate: values.startDate || undefined,
-      endDate: values.endDate || undefined,
       notesDM: values.notesDM || undefined,
       notesPlayers: values.notesPlayers || undefined,
     });
@@ -64,20 +62,7 @@ export default function NewSessionPage() {
           onSubmit={handleSubmit(onSubmit)}
           className="mt-6 rounded-xl border border-zinc-800 bg-zinc-900 p-6 space-y-4"
         >
-          {/* nro */}
-          <div>
-            <label className="block text-sm mb-1">Número de sesión</label>
-            <input
-              type="number"
-              {...register("sessionNumber")}
-              className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 rounded-md"
-            />
-            {errors.sessionNumber && (
-              <p className="text-red-400 text-xs mt-1">
-                {errors.sessionNumber.message}
-              </p>
-            )}
-          </div>
+
 
           {/* titulo */}
           <div>
@@ -111,7 +96,6 @@ export default function NewSessionPage() {
           </div>
 
           {/* fechas */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm mb-1">Fecha inicio</label>
               <input
@@ -125,21 +109,6 @@ export default function NewSessionPage() {
                 </p>
               )}
             </div>
-
-            <div>
-              <label className="block text-sm mb-1">Fecha fin</label>
-              <input
-                type="date"
-                {...register("endDate")}
-                className="w-full bg-zinc-950 border border-zinc-700 px-3 py-2 rounded-md"
-              />
-              {errors.endDate && (
-                <p className="text-red-400 text-xs mt-1">
-                  {errors.endDate.message}
-                </p>
-              )}
-            </div>
-          </div>
 
           {/* ntoas */}
           <div>
@@ -170,7 +139,7 @@ export default function NewSessionPage() {
             )}
           </div>
 
-          {/* botones */}
+          {/* Botones */}
           <div className="flex justify-end gap-3 pt-3">
             <Link
               to={`/campaigns/${campaignId}/sessions`}

@@ -2,16 +2,14 @@ import { api } from "./urlBase";
 import type { SessionDTO } from "../types/sessionTypes";
 
 export async function listCampaignSessions(campaignId: string) {
-  const res = await api.get<SessionDTO[]>(`/campaigns/${campaignId}/sessions`);
+  const res = await api.get<SessionDTO[]>(`/api/campaigns/${campaignId}/sessions`);
   return res.data;
 }
 
 export type CreateSessionPayload = {
-  sessionNumber: number;
   title: string;
   description?: string;
   startDate?: string;
-  endDate?: string;
   notesDM?: string;
   notesPlayers?: string;
 };
@@ -20,8 +18,9 @@ export async function createCampaignSession(
   campaignId: string,
   payload: CreateSessionPayload
 ) {
+  console.log(payload)
   const res = await api.post<SessionDTO>(
-    `/campaigns/${campaignId}/sessions`,
+    `/api/campaigns/${campaignId}/sessions`,
     payload
   );
   return res.data;

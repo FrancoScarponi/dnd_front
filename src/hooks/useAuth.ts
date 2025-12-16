@@ -9,8 +9,7 @@ import {
   logout,
 } from "../redux/slices/authSlice";
 import { RootState, AppDispatch } from "../redux/store";
-//import { fetchBackendUser, registerBackendUser } from "../api/user";
-import { User } from "../types/userTypes";
+import { fetchBackendUser, registerBackendUser } from "../api/user";
 
 export function useAuth() {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,14 +20,10 @@ export function useAuth() {
       dispatch(authStart());
 
       const res = await signInWithEmailAndPassword(auth, email, password);
+      
       const token = await res.user.getIdToken();
-      //descomentar esta linea para la auth con el back
-      //const user = await fetchBackendUser(token);
-      const user: User = {
-        firebaseId: res.user.uid,
-        email: res.user.email,
-        displayName: res.user.displayName
-      }
+      
+      const user = await fetchBackendUser(token);  
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
@@ -54,14 +49,8 @@ export function useAuth() {
       await updateProfile(res.user, {
         displayName: displayName,
       });
-      //descomentar esta linea para el signup con el back
-      //const user = await registerBackendUser(token, displayName);
-
-      const user = {
-        firebaseId: res.user.uid,
-        email: res.user.email,
-        displayName: res.user.displayName
-      }
+      
+      const user = await registerBackendUser(email, password, displayName);
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));

@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CampaignDTO } from "../types/campaignTypes";
-import { getCampaign } from "../api/mock/campaign";
+import { getCampaign } from "../api/campaigns";
 
 export default function CampaignDetailPage() {
   const { id } = useParams();

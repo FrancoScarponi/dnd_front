@@ -28,7 +28,11 @@ export default function AppLayout() {
             <Item
               to="/campaigns"
               label="Campañas"
-              isActivePath={(p) => p.startsWith("/campaigns") && p !== "/campaigns/new"}
+              isActivePath={(p) =>
+                p.startsWith("/campaigns") &&
+                p !== "/campaigns/new" &&
+                p !== "/campaigns/join"
+              }
             />
 
             <Item
@@ -38,6 +42,9 @@ export default function AppLayout() {
             />
 
             <Item to="/characters" label="Personajes" />
+
+            <Item to="/campaigns/join" label="Unirse a Campaña" />
+            
           </nav>
 
           <div className="mt-auto p-4 border-t border-zinc-800">

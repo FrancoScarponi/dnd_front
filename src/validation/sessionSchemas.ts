@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const sessionFormSchema = z
   .object({
-    sessionNumber: z.coerce.number().int().min(1, "Debe ser mínimo 1"),
 
     title: z
       .string()
@@ -19,8 +18,6 @@ export const sessionFormSchema = z
 
     startDate: z.string().min(1, "La fecha de inicio es obligatoria"),
 
-    endDate: z.string().min(1, "La fecha de fin es obligatoria"),
-
     notesDM: z
       .string()
       .max(5000, "Las notas del DM no pueden superar los 5000 caracteres")
@@ -34,17 +31,5 @@ export const sessionFormSchema = z
       )
       .optional(),
   })
-
-  .refine(
-    (data) => {
-      const start = new Date(data.startDate);
-      const end = new Date(data.endDate);
-      return end >= start;
-    },
-    {
-      message: "La fecha de fin no puede ser anterior a la fecha de inicio",
-      path: ["endDate"],
-    }
-  );
 
 export type SessionFormValues = z.infer<typeof sessionFormSchema>;
