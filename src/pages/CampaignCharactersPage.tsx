@@ -4,9 +4,7 @@ import type { CharacterDTO } from "../types/characterTypes";
 import {
   addCharacterToCampaignMock,
   listAllCharactersMock,
-  listCampaignCharactersMock,
   removeCharacterFromCampaignMock,
-  getCampaignMock,
 } from "../api/mock/campaignCharacters";
 import { listCampaignCharacters } from "../api/campaignCharacter";
 import { getCampaign } from "../api/campaigns";
