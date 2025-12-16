@@ -1,42 +1,6 @@
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-
-function Item({
-  to,
-  label,
-  end,
-  isActivePath,
-}: {
-  to: string;
-  label: string;
-  end?: boolean;
-  isActivePath?: (pathname: string) => boolean;
-}) {
-  const { pathname } = useLocation();
-
-  const active =
-    typeof isActivePath === "function" ? isActivePath(pathname) : false;
-
-  return (
-    <NavLink
-      to={to}
-      end={end}
-      className={({ isActive }) => {
-        const finalActive = typeof isActivePath === "function" ? active : isActive;
-
-        return [
-          "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition",
-          finalActive
-            ? "bg-zinc-800 text-white"
-            : "text-zinc-300 hover:bg-zinc-900 hover:text-white",
-        ].join(" ");
-      }}
-    >
-      <span className="h-2 w-2 rounded-full bg-zinc-600" />
-      {label}
-    </NavLink>
-  );
-}
+import { Item } from "./ui/Item";
 
 export default function AppLayout() {
   const { logoutUser, user } = useAuth();
@@ -48,8 +12,8 @@ export default function AppLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white w-full overflow-x-hidden">
-      <div className="flex min-h-screen">
+    <div className="bg-zinc-950 text-white w-full overflow-x-hidden">
+      <div className="flex h-screen"> {/* Cambié min-h-screen por h-screen */}
         <aside className="hidden md:flex md:w-64 md:flex-col md:border-r md:border-zinc-800">
           <div className="p-4 border-b border-zinc-800">
             <div className="text-lg font-bold">DnD Manager</div>
@@ -86,7 +50,7 @@ export default function AppLayout() {
           </div>
         </aside>
 
-        <main className="flex-1">
+        <main className="flex-1 overflow-y-auto h-screen">
           <div className="px-4 py-8 md:px-8 md:py-8">
             <Outlet />
           </div>
