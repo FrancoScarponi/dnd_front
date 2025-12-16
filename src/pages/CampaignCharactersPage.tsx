@@ -8,6 +8,8 @@ import {
   removeCharacterFromCampaignMock,
   getCampaignMock,
 } from "../api/mock/campaignCharacters";
+import { listCampaignCharacters } from "../api/campaignCharacter";
+import { getCampaign } from "../api/campaigns";
 
 export default function CampaignCharactersPage() {
   const { campaignId } = useParams();
@@ -39,12 +41,13 @@ export default function CampaignCharactersPage() {
 
   const load = async () => {
     if (!campaignId) return;
+    console.log("Loading campaign characters for campaignId:", campaignId);
     setError(null);
     setLoading(true);
     try {
       const [camp, campChars, all] = await Promise.all([
-        getCampaignMock(campaignId),
-        listCampaignCharactersMock(campaignId),
+        getCampaign(campaignId),
+        listCampaignCharacters(campaignId),
         listAllCharactersMock(),
       ]);
       setCampaignName(camp.name);

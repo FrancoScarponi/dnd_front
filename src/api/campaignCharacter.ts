@@ -2,7 +2,7 @@ import { api } from "./urlBase";
 import type { CharacterDTO } from "../types/characterTypes";
 
 export async function listCampaignCharacters(campaignId: string) {
-  const res = await api.get<CharacterDTO[]>(`/campaigns/${campaignId}/characters`);
+  const res = await api.get<CharacterDTO[]>(`/api/campaigns/${campaignId}/characters`);
   return res.data;
 }
 

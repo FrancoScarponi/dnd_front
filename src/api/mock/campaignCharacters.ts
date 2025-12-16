@@ -1,5 +1,6 @@
 import type { CampaignDTO } from "../../types/campaignTypes";
 import type { CharacterDTO } from "../../types/characterTypes";
+import { api } from "../urlBase";
 import { db, sleep } from "./mockDb";
 
 function getCampaignOrThrow(id: string) {
@@ -22,6 +23,12 @@ export async function getCampaignMock(id: string): Promise<CampaignDTO> {
 export async function listAllCharactersMock(): Promise<CharacterDTO[]> {
   await sleep();
   return structuredClone(db.characters);
+}
+
+export async function listAllCharacters(campaignId: string): Promise<CharacterDTO[]> {
+  await sleep();
+  const res = await api.get<CharacterDTO[]>(`/api/campaigns/${campaignId}/characters`);
+  return res.data;
 }
 
 export async function listCampaignCharactersMock(campaignId: string): Promise<CharacterDTO[]> {

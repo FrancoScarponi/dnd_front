@@ -10,7 +10,7 @@ import {
 export default function NewSessionPage() {
   const [searchParams] = useSearchParams();
   const campaignId = searchParams.get("campaign");
-
+  console.log("Campaign ID:", campaignId);
   const navigate = useNavigate();
   const today = new Date().toISOString().slice(0, 10); 
 
@@ -35,6 +35,7 @@ export default function NewSessionPage() {
 
   async function onSubmit(values: SessionFormValues) {
     if(!campaignId) return
+    console.log("Submitting form with values:", campaignId, values);
     await createCampaignSession(campaignId, {
       ...values,
       description: values.description || undefined,
