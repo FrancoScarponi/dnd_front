@@ -10,4 +10,5 @@ export interface SessionDTO {
   notesPlayers?: string;
   createdAt: string;
   updatedAt: string;
+  status:string;
 }

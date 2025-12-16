@@ -14,6 +14,7 @@ import CampaignCharactersPage from "../pages/CampaignCharactersPage";
 import CampaignSessionsPage from "../pages/CampaignSessionPage";
 import NewSessionPage from "../pages/NewSessionPage";
 import CampaignJoinPage from "../pages/CampaignJoinPage";
+import SessionDetailPage from "../pages/SessionDetailPage";
 
 const AppRouter = () => {
   return (
@@ -42,6 +43,7 @@ const AppRouter = () => {
         {/* Sesiones */}
         <Route path="/campaigns/:id/sessions" element={<CampaignSessionsPage />} />
         <Route path="/sessions/new" element={<NewSessionPage />} />
+        <Route path="/campaigns/:id/sessions/:sessionId" element={<SessionDetailPage />} />
 
         
         {/* Personajes */}

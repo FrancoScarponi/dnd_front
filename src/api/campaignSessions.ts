@@ -26,10 +26,8 @@ export async function createCampaignSession(
   return res.data;
 }
 
-export async function getSession(campaignId: string, sessionId: string) {
-  const res = await api.get<SessionDTO>(
-    `/campaigns/${campaignId}/sessions/${sessionId}`
-  );
+export async function getSession(sessionId: string): Promise<SessionDTO> {
+  const res = await api.get<SessionDTO>(`/api/sessions/${sessionId}`);
   return res.data;
 }
 
@@ -49,5 +47,21 @@ export async function deleteSession(campaignId: string, sessionId: string) {
   const res = await api.delete<{ ok: true }>(
     `/campaigns/${campaignId}/sessions/${sessionId}`
   );
+  return res.data;
+}
+
+
+export async function startSession(sessionId: string): Promise<SessionDTO> {
+  const res = await api.post<SessionDTO>(`/api/sessions/${sessionId}/start`);
+  return res.data;
+}
+
+export async function pauseSession(sessionId: string): Promise<SessionDTO> {
+  const res = await api.post<SessionDTO>(`/api/sessions/${sessionId}/pause`);
+  return res.data;
+}
+
+export async function endSession(sessionId: string): Promise<SessionDTO> {
+  const res = await api.post<SessionDTO>(`/api/sessions/${sessionId}/end`);
   return res.data;
 }
