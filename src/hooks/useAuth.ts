@@ -50,7 +50,7 @@ export function useAuth() {
         displayName: displayName,
       });
       
-      const user = await registerBackendUser(email, password, displayName);
+      const user = await registerBackendUser(token ,email, password, displayName);
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));

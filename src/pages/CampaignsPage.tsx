@@ -162,6 +162,10 @@ export default function CampaignsPage() {
   const dialogOpen = action.open;
   const dialogLoading = action.open && busyId === action.campaignId;
 
+  const actionName = action.open ? action.campaignName : "";
+  const isDelete = action.open && action.kind === "delete";
+
+
   return (
     <div className="bg-zinc-950 text-white px-4 py-8">
       <div className="mx-auto max-w-5xl">
@@ -213,19 +217,15 @@ export default function CampaignsPage() {
 
       <ConfirmDialog
         open={dialogOpen}
-        title={
-          action.open && action.kind === "delete"
-            ? "Eliminar campaña"
-            : "Salir de la campaña"
-        }
+        title={isDelete ? "Eliminar campaña" : "Salir de la campaña"}
         description={
-          action.open && action.kind === "delete"
-            ? `Vas a eliminar “${action.campaignName}”. Esta acción no se puede deshacer.`
-            : `Vas a salir de “${action.campaignName}”.`
+          isDelete
+            ? `Vas a eliminar “${actionName}”. Esta acción no se puede deshacer.`
+            : `Vas a salir de “${actionName}”.`
         }
-        confirmText={action.open && action.kind === "delete" ? "Eliminar" : "Salir"}
+        confirmText={isDelete ? "Eliminar" : "Salir"}
         cancelText="Cancelar"
-        destructive={action.open && action.kind === "delete"}
+        destructive={isDelete}
         loading={dialogLoading}
         onClose={() => {
           if (dialogLoading) return;
@@ -234,8 +234,6 @@ export default function CampaignsPage() {
         onConfirm={async () => {
           if (!action.open) return;
           const id = action.campaignId;
-
-          // cerramos el modal al terminar (o lo podés dejar abierto mientras carga)
           try {
             if (action.kind === "delete") await runDelete(id);
             else await runLeave(id);
